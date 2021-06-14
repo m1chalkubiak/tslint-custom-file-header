@@ -6,7 +6,7 @@
   "license": "MIT",
   "main": "dist/index.js",
   "scripts": {
-    "prepublish": " npm run build && npm run test",
+    "prepublishOnly": "npm run build && npm run test",
     "start": "mkdir -p dist && npm run build",
     "build": "tsc",
     "test": "jest"

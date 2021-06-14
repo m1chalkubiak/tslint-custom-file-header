@@ -1,6 +1,8 @@
 import * as Lint from 'tslint';
 import * as TS from 'typescript';
 
+import { LICENSE_TEMPLATES, LICENSE, CURRENT } from './customFileHeaderRule.helper';
+
 export class Rule extends Lint.Rules.AbstractRule {
   public static metadata: Lint.IRuleMetadata = {
     ruleName: 'custom-file-header',
@@ -8,7 +10,12 @@ export class Rule extends Lint.Rules.AbstractRule {
     optionsDescription: 'Need to pass custom file header',
     options: {
       type: 'array',
-      items: { header: 'string' },
+      items: {
+        header: 'string',
+        type: 'string',
+        company: 'string',
+        defaultYear: 'string',
+      },
     },
     hasFix: true,
     type: 'formatting',
@@ -19,10 +26,37 @@ export class Rule extends Lint.Rules.AbstractRule {
     return new Date().getFullYear();
   }
 
-  get header() {
-    const headerContent = this.ruleArguments[0] || [''];
+  get defaultYear() {
+    const defaultYearValue = this.ruleArguments[3];
 
-    return headerContent.split('{YEAR}');
+    if (defaultYearValue) {
+      if (defaultYearValue === CURRENT) {
+        return this.currentYear;
+      }
+
+      return defaultYearValue;
+    }
+
+    return this.currentYear;
+  }
+
+  get header() {
+    const headerValue = this.ruleArguments[0] || [''];
+
+    if (headerValue === LICENSE) {
+      const licenseType = this.ruleArguments[1];
+      const company = this.ruleArguments[2];
+
+      const license = LICENSE_TEMPLATES[licenseType];
+
+      if (license && company) {
+        return license.replace('{COMPANY}', company).split('{YEAR}');
+      }
+
+      return '';
+    }
+
+    return headerValue.split('{YEAR}');
   }
 
   public static FAILURE_MESSAGE = 'Custom header is missing';
@@ -51,7 +85,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
     const fix: Lint.Fix | undefined = Lint.Replacement.appendText(
       0,
-      `${firstPart}${this.currentYear}${secoundPart}\n\n`
+      `${firstPart}${this.defaultYear}${secoundPart}\n\n`
     );
 
     return [new Lint.RuleFailure(sourceFile, 0, 1, Rule.FAILURE_MESSAGE, this.ruleName, fix)];
