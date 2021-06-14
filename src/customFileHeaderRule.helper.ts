@@ -1,5 +1,12 @@
+export const LICENSE = 'license';
+export const CURRENT = 'current';
+
+export const APACHE_LICENSE_2_0 = 'Apache License 2.0';
+export const MIT_LICENSE = 'MIT License';
+export const GNU_GENERAL_PUBLIC_LICENSE_v3_0 = 'GNU General Public License v3.0';
+
 export const LICENSE_TEMPLATES = {
-  'Apache License 2.0': `/**
+  [APACHE_LICENSE_2_0]: `/**
 	* @license
 	*
 	* Copyright (c) {YEAR} {COMPANY}
@@ -16,7 +23,7 @@ export const LICENSE_TEMPLATES = {
 	* See the License for the specific language governing permissions and
 	* limitations under the License.
 	*/`,
-  'MIT License': `/**
+  [MIT_LICENSE]: `/**
 	* MIT License
 	*
 	* Copyright (c) {YEAR} {COMPANY}
@@ -39,7 +46,7 @@ export const LICENSE_TEMPLATES = {
 	* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 	* SOFTWARE.
 	*/`,
-  'GNU General Public License v3.0': `/**
+  [GNU_GENERAL_PUBLIC_LICENSE_v3_0]: `/**
 	*  Copyright (C) {YEAR} {COMPANY}
 	*
 	*  This program is free software: you can redistribute it and/or modify

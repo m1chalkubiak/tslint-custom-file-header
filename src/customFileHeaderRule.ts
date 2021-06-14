@@ -1,10 +1,7 @@
 import * as Lint from 'tslint';
 import * as TS from 'typescript';
 
-import { LICENSE_TEMPLATES } from './customFileHeaderRule.helper';
-
-const LICENSE = 'license';
-const CURRENT = 'current';
+import { LICENSE_TEMPLATES, LICENSE, CURRENT } from './customFileHeaderRule.helper';
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static metadata: Lint.IRuleMetadata = {
