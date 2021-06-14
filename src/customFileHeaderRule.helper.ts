@@ -1,4 +1,4 @@
-const LICENSE_TEMPLATES = {
+export const LICENSE_TEMPLATES = {
   'Apache License 2.0': `/**
 	* @license
 	*

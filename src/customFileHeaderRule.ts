@@ -4,6 +4,7 @@ import * as TS from 'typescript';
 import { LICENSE_TEMPLATES } from './customFileHeaderRule.helper';
 
 const LICENSE = 'license';
+const CURRENT = 'current';
 
 export class Rule extends Lint.Rules.AbstractRule {
   public static metadata: Lint.IRuleMetadata = {
@@ -26,6 +27,20 @@ export class Rule extends Lint.Rules.AbstractRule {
 
   get currentYear() {
     return new Date().getFullYear();
+  }
+
+  get defaultYear() {
+    const defaultYearValue = this.ruleArguments[3];
+
+    if (defaultYearValue) {
+      if (defaultYearValue === CURRENT) {
+        return this.currentYear;
+      }
+
+      return defaultYearValue;
+    }
+
+    return this.currentYear;
   }
 
   get header() {
@@ -73,7 +88,7 @@ export class Rule extends Lint.Rules.AbstractRule {
 
     const fix: Lint.Fix | undefined = Lint.Replacement.appendText(
       0,
-      `${firstPart}${this.currentYear}${secoundPart}\n\n`
+      `${firstPart}${this.defaultYear}${secoundPart}\n\n`
     );
 
     return [new Lint.RuleFailure(sourceFile, 0, 1, Rule.FAILURE_MESSAGE, this.ruleName, fix)];
