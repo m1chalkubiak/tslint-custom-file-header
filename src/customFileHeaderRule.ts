@@ -1,6 +1,10 @@
 import * as Lint from 'tslint';
 import * as TS from 'typescript';
 
+import { LICENSE_TEMPLATES } from './customFileHeaderRule.helper';
+
+const LICENSE = 'license';
+
 export class Rule extends Lint.Rules.AbstractRule {
   public static metadata: Lint.IRuleMetadata = {
     ruleName: 'custom-file-header',
@@ -8,7 +12,12 @@ export class Rule extends Lint.Rules.AbstractRule {
     optionsDescription: 'Need to pass custom file header',
     options: {
       type: 'array',
-      items: { header: 'string' },
+      items: {
+        header: 'string',
+        type: 'string',
+        company: 'string',
+        defaultYear: 'string',
+      },
     },
     hasFix: true,
     type: 'formatting',
@@ -20,9 +29,22 @@ export class Rule extends Lint.Rules.AbstractRule {
   }
 
   get header() {
-    const headerContent = this.ruleArguments[0] || [''];
+    const headerValue = this.ruleArguments[0] || [''];
 
-    return headerContent.split('{YEAR}');
+    if (headerValue === LICENSE) {
+      const licenseType = this.ruleArguments[1];
+      const company = this.ruleArguments[2];
+
+      const license = LICENSE_TEMPLATES[licenseType];
+
+      if (license && company) {
+        return license.replace('{COMPANY}', company).split('{YEAR}');
+      }
+
+      return '';
+    }
+
+    return headerValue.split('{YEAR}');
   }
 
   public static FAILURE_MESSAGE = 'Custom header is missing';
